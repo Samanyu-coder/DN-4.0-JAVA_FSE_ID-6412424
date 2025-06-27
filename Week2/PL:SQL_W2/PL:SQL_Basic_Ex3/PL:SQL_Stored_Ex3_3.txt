@@ -1,0 +1,44 @@
+CREATE SEQUENCE Transactions_SEQ START WITH 3 INCREMENT BY 1;
+
+
+
+
+CREATE OR REPLACE PROCEDURE TransferFunds (
+    from_acc_id IN NUMBER,
+    to_acc_id IN NUMBER,
+    amount IN NUMBER
+) AS
+    v_balance NUMBER;
+BEGIN
+    -- Check if source account has sufficient balance
+    SELECT Balance INTO v_balance
+    FROM Accounts
+    WHERE AccountID = from_acc_id
+    FOR UPDATE;
+
+    IF v_balance < amount THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Insufficient balance in source account');
+    END IF;
+
+    -- Deduct from source account
+    UPDATE Accounts
+    SET Balance = Balance - amount,
+        LastModified = SYSDATE
+    WHERE AccountID = from_acc_id;
+
+    -- Add to destination account
+    UPDATE Accounts
+    SET Balance = Balance + amount,
+        LastModified = SYSDATE
+    WHERE AccountID = to_acc_id;
+
+    -- Log transactions
+    INSERT INTO Transactions (TransactionID, AccountID, TransactionDate, Amount, TransactionType)
+    VALUES (Transactions_SEQ.NEXTVAL, from_acc_id, SYSDATE, amount, 'Transfer');
+
+    INSERT INTO Transactions (TransactionID, AccountID, TransactionDate, Amount, TransactionType)
+    VALUES (Transactions_SEQ.NEXTVAL, to_acc_id, SYSDATE, amount, 'Transfer');
+
+    COMMIT;
+END;
+/
