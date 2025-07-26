@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  background-color: white;
+}
+
+.heading {
+  color: brown;
+}
+
+.Name {
+  font-weight: 300;
+  color: blue;
+}
+
+.School {
+  color: crimson;
+}
+
+.Total {
+  color: darkmagenta;
+}
+
+.Score {
+  color: forestgreen;
+}
+
+.formatstyle {
+  text-align: center;
+  font-size: large;
+  padding: 40px;
+  margin-top: 50px;
+}
