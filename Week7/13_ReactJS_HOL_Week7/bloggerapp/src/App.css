@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.section {
+  border-left: 3px solid green;
+  padding: 10px;
+  min-width: 250px;
+}
+
+.st2 h1,
+.v1 h1,
+.mystyle1 h1 {
+  font-weight: bold;
+}
